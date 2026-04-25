@@ -126,11 +126,11 @@ button[data-baseweb="tab"][aria-selected="true"] { color: #f1f5f9 !important; bo
 # ─────────────────────────────────────────────
 # FILE CHECK
 # ─────────────────────────────────────────────
+# FILE CHECK  (only core files are required)
+# ─────────────────────────────────────────────
 required = [
     "scaler.pkl", "features.pkl",
-    "models/ridge.pkl", "models/lasso.pkl",
-    "models/pls.pkl",   "models/pcr.pkl",
-    "models/results.json",
+    "models/ridge.pkl", "models/lasso.pkl", "models/pls.pkl",
 ]
 missing = [f for f in required if not os.path.exists(f)]
 if missing:
@@ -138,21 +138,37 @@ if missing:
     st.stop()
 
 # ─────────────────────────────────────────────
-# LOAD ARTEFACTS
+# LOAD ARTEFACTS  (pcr + results are optional)
 # ─────────────────────────────────────────────
 @st.cache_resource
 def load_artifacts():
     sc  = joblib.load("scaler.pkl")
     ft  = joblib.load("features.pkl")
-    mdl = {m: joblib.load(f"models/{m}.pkl") for m in ["ridge", "lasso", "pls", "pcr"]}
-    with open("models/results.json") as f:
-        res = json.load(f)
+
+    # Load whichever models exist
+    mdl = {}
+    for m in ["ridge", "lasso", "pls", "pcr"]:
+        path = f"models/{m}.pkl"
+        if os.path.exists(path):
+            mdl[m] = joblib.load(path)
+
+    # Load CV results if available, else build placeholder
+    res_path = "models/results.json"
+    if os.path.exists(res_path):
+        with open(res_path) as f:
+            res = json.load(f)
+    else:
+        res = {m: {"mse": 0.0, "rmse": 0.0} for m in mdl}
+
     return sc, ft, mdl, res
 
 scaler, features, all_models, cv_results = load_artifacts()
 
-MODEL_LABELS = {"ridge": "Ridge", "lasso": "Lasso", "pls": "PLS", "pcr": "PCR"}
-MODEL_COLORS = {"ridge": "#e2e8f0", "lasso": "#94a3b8", "pls": "#cbd5e1", "pcr": "#64748b"}
+# Build label/color dicts from whatever models loaded
+_ALL_LABELS = {"ridge": "Ridge", "lasso": "Lasso", "pls": "PLS", "pcr": "PCR"}
+_ALL_COLORS = {"ridge": "#e2e8f0", "lasso": "#94a3b8", "pls": "#cbd5e1", "pcr": "#64748b"}
+MODEL_LABELS = {m: _ALL_LABELS[m] for m in all_models}
+MODEL_COLORS = {m: _ALL_COLORS[m] for m in all_models}
 DAY_NAMES    = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 CHART_LAYOUT = dict(
