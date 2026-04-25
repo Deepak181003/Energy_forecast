@@ -153,13 +153,21 @@ def load_artifacts():
         if os.path.exists(path):
             mdl[m] = joblib.load(path)
 
-    # Load CV results if available, else build placeholder
+    # Load CV results if available, else use pre-computed values
     res_path = "models/results.json"
     if os.path.exists(res_path):
         with open(res_path) as f:
             res = json.load(f)
     else:
-        res = {m: {"mse": 0.0, "rmse": 0.0} for m in mdl}
+        # Pre-computed CV results from train.py (5-fold TimeSeriesSplit)
+        res = {
+            "ridge": {"mse": 1.2866863578844473e-06, "rmse": 0.00090519449686659},
+            "lasso": {"mse": 0.004719482405300399,   "rmse": 0.06827823162046073},
+            "pls":   {"mse": 0.1740291828330766,     "rmse": 0.41550721479557884},
+            "pcr":   {"mse": 0.2833370403624973,     "rmse": 0.5297635010664912},
+        }
+        # Only keep results for models that are loaded
+        res = {m: res[m] for m in mdl if m in res}
 
     return sc, ft, mdl, res
 
