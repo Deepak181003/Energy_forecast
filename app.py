@@ -28,94 +28,95 @@ st.set_page_config(
 st.markdown("""
 <style>
 /* ── Base ─────────────────────────────────── */
-html, body, .stApp { background-color: #0d0d0d !important; color: #e2e8f0; }
+html, body, .stApp { background-color: #0f172a !important; color: #e2e8f0; }
 [data-testid="collapsedControl"] { display: none; }
 
 /* ── Top nav ──────────────────────────────── */
 .topnav {
     display: flex; align-items: center;
-    background: #111111; border-bottom: 1px solid #222;
+    background: #1e293b; border-bottom: 1px solid #334155;
     padding: 13px 28px; margin: -1rem -1rem 1.5rem -1rem;
 }
 .topnav-logo { font-size: 1.15rem; font-weight: 700; color: #f1f5f9; letter-spacing:.02em; }
-.topnav-sub  { color: #4b5563; font-size: 0.8rem; margin-left: 10px; }
+.topnav-sub  { color: #64748b; font-size: 0.8rem; margin-left: 10px; }
 .topnav-badge {
-    margin-left: auto; background: #1c1c1c; border: 1px solid #2a2a2a;
+    margin-left: auto; background: #0f172a; border: 1px solid #334155;
     border-radius: 20px; padding: 4px 14px;
-    font-size: 0.75rem; color: #6b7280; letter-spacing:.05em;
+    font-size: 0.75rem; color: #94a3b8; letter-spacing:.05em;
 }
 
 /* ── Tabs ─────────────────────────────────── */
-[data-testid="stTabs"] { border-bottom: 1px solid #1e1e1e; }
-button[data-baseweb="tab"] { color: #4b5563 !important; font-size:.85rem; font-weight:500; padding:10px 18px; }
-button[data-baseweb="tab"][aria-selected="true"] { color: #f1f5f9 !important; border-bottom: 2px solid #e2e8f0 !important; }
+[data-testid="stTabs"] { border-bottom: 1px solid #1e293b; }
+button[data-baseweb="tab"] { color: #64748b !important; font-size:.85rem; font-weight:500; padding:10px 18px; }
+button[data-baseweb="tab"][aria-selected="true"] { color: #f1f5f9 !important; border-bottom: 2px solid #3b82f6 !important; }
 
 /* ── Cards ────────────────────────────────── */
 .card {
-    background: #111111; border: 1px solid #1e1e1e;
+    background: #1e293b; border: 1px solid #334155;
     border-radius: 12px; padding: 18px 22px; margin-bottom: 14px;
 }
 .card-label {
-    font-size: .7rem; font-weight: 600; color: #4b5563;
+    font-size: .7rem; font-weight: 600; color: #64748b;
     letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px;
 }
 
 /* ── Metrics ──────────────────────────────── */
 [data-testid="stMetric"] {
-    background: #111111 !important; border: 1px solid #1e1e1e !important;
+    background: #1e293b !important; border: 1px solid #334155 !important;
     border-radius: 10px !important; padding: 14px 18px !important;
 }
-[data-testid="stMetricLabel"] { color: #4b5563 !important; font-size:.72rem !important; letter-spacing:.06em; }
+[data-testid="stMetricLabel"] { color: #94a3b8 !important; font-size:.72rem !important; letter-spacing:.06em; }
 [data-testid="stMetricValue"] { color: #f1f5f9 !important; font-size:1.45rem !important; font-weight:700 !important; }
 
 /* ── Prediction hero ──────────────────────── */
 .pred-hero {
-    background: #111111; border: 1px solid #222;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 1px solid #334155;
     border-radius: 14px; padding: 30px 24px; text-align: center;
 }
-.ph-label { color: #4b5563; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; }
+.ph-label { color: #64748b; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; }
 .ph-value { color: #f1f5f9; font-size: 3.2rem; font-weight: 800; line-height:1.05; margin: 6px 0 2px; }
-.ph-unit  { color: #6b7280; font-size:.88rem; }
+.ph-unit  { color: #94a3b8; font-size:.88rem; }
 .ph-badge {
-    display:inline-block; margin-top:12px; background:#1c1c1c;
-    border:1px solid #2a2a2a; border-radius:20px;
-    padding:3px 14px; font-size:.72rem; color:#9ca3af;
+    display:inline-block; margin-top:12px; background:#0f172a;
+    border:1px solid #334155; border-radius:20px;
+    padding:3px 14px; font-size:.72rem; color:#94a3b8;
 }
 
 /* ── Section divider ──────────────────────── */
 .sh {
-    font-size:.7rem; font-weight:600; color:#374151;
+    font-size:.7rem; font-weight:600; color:#64748b;
     letter-spacing:.1em; text-transform:uppercase;
     margin:1.4rem 0 .7rem; padding-bottom:5px;
-    border-bottom:1px solid #1a1a1a;
+    border-bottom:1px solid #1e293b;
 }
 
 /* ── Info / tip box ───────────────────────── */
 .tip {
-    background:#111; border-left:3px solid #1e1e1e;
+    background:#1e293b; border-left:3px solid #3b82f6;
     border-radius:0 8px 8px 0; padding:10px 14px;
-    color:#4b5563; font-size:.8rem; margin-bottom:1rem;
+    color:#94a3b8; font-size:.8rem; margin-bottom:1rem;
 }
 
 /* ── Vertical divider ─────────────────────── */
-.vdiv { border-left:1px solid #1a1a1a; min-height:460px; margin:0 6px; }
+.vdiv { border-left:1px solid #1e293b; min-height:460px; margin:0 6px; }
 
 /* ── Getting-started cards ────────────────── */
-.gs { background:#0f0f0f; border:1px solid #1a1a1a; border-radius:12px; padding:20px; }
-.gs-n { font-size:2rem; font-weight:800; color:#1e1e1e; line-height:1; margin-bottom:8px; }
+.gs { background:#1e293b; border:1px solid #334155; border-radius:12px; padding:20px; }
+.gs-n { font-size:2rem; font-weight:800; color:#334155; line-height:1; margin-bottom:8px; }
 .gs-t { font-size:.88rem; font-weight:600; color:#e2e8f0; margin-bottom:5px; }
-.gs-b { font-size:.8rem; color:#4b5563; line-height:1.55; }
+.gs-b { font-size:.8rem; color:#64748b; line-height:1.55; }
 
 /* ── Model eval table ─────────────────────── */
 .eval-row {
     display:flex; align-items:center; justify-content:space-between;
-    background:#111; border:1px solid #1e1e1e; border-radius:10px;
+    background:#1e293b; border:1px solid #334155; border-radius:10px;
     padding:14px 20px; margin-bottom:10px;
 }
 .eval-name { font-size:.9rem; font-weight:600; color:#e2e8f0; min-width:80px; }
-.eval-bar-wrap { flex:1; margin:0 20px; background:#1a1a1a; border-radius:4px; height:6px; }
-.eval-bar { height:6px; border-radius:4px; background:#374151; }
-.eval-val { font-size:.85rem; color:#9ca3af; min-width:110px; text-align:right; }
+.eval-bar-wrap { flex:1; margin:0 20px; background:#0f172a; border-radius:4px; height:6px; }
+.eval-bar { height:6px; border-radius:4px; }
+.eval-val { font-size:.85rem; color:#94a3b8; min-width:110px; text-align:right; }
 
 /* ── Global text ──────────────────────────── */
 .stApp p, .stApp li, .stMarkdown p { color: #e2e8f0; }
@@ -166,20 +167,20 @@ scaler, features, all_models, cv_results = load_artifacts()
 
 # Build label/color dicts from whatever models loaded
 _ALL_LABELS = {"ridge": "Ridge", "lasso": "Lasso", "pls": "PLS", "pcr": "PCR"}
-_ALL_COLORS = {"ridge": "#e2e8f0", "lasso": "#94a3b8", "pls": "#cbd5e1", "pcr": "#64748b"}
+_ALL_COLORS = {"ridge": "#3b82f6", "lasso": "#22c55e", "pls": "#f59e0b", "pcr": "#ef4444"}
 MODEL_LABELS = {m: _ALL_LABELS[m] for m in all_models}
 MODEL_COLORS = {m: _ALL_COLORS[m] for m in all_models}
 DAY_NAMES    = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 CHART_LAYOUT = dict(
-    paper_bgcolor="#111111", plot_bgcolor="#111111",
-    font=dict(color="#9ca3af", size=11),
+    paper_bgcolor="#1e293b", plot_bgcolor="#1e293b",
+    font=dict(color="#94a3b8", size=11),
     margin=dict(l=20, r=20, t=14, b=20),
 )
 
 def dark_axes(fig, grid=True):
-    fig.update_xaxes(color="#374151", showgrid=False, zeroline=False)
-    fig.update_yaxes(color="#374151", gridcolor="#1a1a1a" if grid else "rgba(0,0,0,0)",
+    fig.update_xaxes(color="#475569", showgrid=False, zeroline=False)
+    fig.update_yaxes(color="#475569", gridcolor="#0f172a" if grid else "rgba(0,0,0,0)",
                      zeroline=False)
 
 # ─────────────────────────────────────────────
@@ -386,12 +387,12 @@ with tab2:
         fig_r.update_layout(
             height=300,
             polar=dict(
-                bgcolor="#111111",
-                radialaxis=dict(visible=True, color="#374151", gridcolor="#1a1a1a"),
-                angularaxis=dict(color="#4b5563"),
+                bgcolor="#0f172a",
+                radialaxis=dict(visible=True, color="#334155", gridcolor="#1e293b"),
+                angularaxis=dict(color="#475569"),
             ),
-            legend=dict(bgcolor="#111", bordercolor="#1e1e1e",
-                        font=dict(color="#6b7280", size=10)),
+            legend=dict(bgcolor="#1e293b", bordercolor="#334155",
+                        font=dict(color="#94a3b8", size=10)),
             **CHART_LAYOUT,
         )
         st.plotly_chart(fig_r, use_container_width=True)
@@ -427,10 +428,11 @@ with tab3:
     max_rmse = max(v["rmse"] for v in cv_results.values())
     for m, res in cv_results.items():
         pct = int(res["rmse"] / max_rmse * 100) if max_rmse > 0 else 0
+        bar_color = _ALL_COLORS.get(m, "#64748b")
         st.markdown(f"""
 <div class="eval-row">
   <span class="eval-name">{MODEL_LABELS[m]}</span>
-  <div class="eval-bar-wrap"><div class="eval-bar" style="width:{pct}%"></div></div>
+  <div class="eval-bar-wrap"><div class="eval-bar" style="width:{pct}%;background:{bar_color}"></div></div>
   <span class="eval-val">MSE {res['mse']:.4f} · RMSE {res['rmse']:.4f}</span>
 </div>""", unsafe_allow_html=True)
 
