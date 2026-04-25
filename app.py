@@ -409,17 +409,24 @@ with tab3:
                 unsafe_allow_html=True)
 
     # Best model
-    best = min(cv_results, key=lambda m: cv_results[m]["mse"])
-    st.markdown(
-        f'<div class="tip">🏆 Best model: <strong>{MODEL_LABELS[best]}</strong> '
-        f'— RMSE {cv_results[best]["rmse"]:.4f} kW</div>',
-        unsafe_allow_html=True,
-    )
+    best = min(cv_results, key=lambda m: cv_results[m]["mse"]) if any(cv_results[m]["mse"] > 0 for m in cv_results) else list(cv_results.keys())[0]
+    has_results = any(cv_results[m]["rmse"] > 0 for m in cv_results)
+    if has_results:
+        st.markdown(
+            f'<div class="tip">🏆 Best model: <strong>{MODEL_LABELS[best]}</strong> '
+            f'— RMSE {cv_results[best]["rmse"]:.4f} kW</div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            '<div class="tip">⚠️ No evaluation results found. Push <code>models/results.json</code> to GitHub or re-run <code>train.py</code>.</div>',
+            unsafe_allow_html=True,
+        )
 
     # Eval rows with inline bar
     max_rmse = max(v["rmse"] for v in cv_results.values())
     for m, res in cv_results.items():
-        pct = int(res["rmse"] / max_rmse * 100)
+        pct = int(res["rmse"] / max_rmse * 100) if max_rmse > 0 else 0
         st.markdown(f"""
 <div class="eval-row">
   <span class="eval-name">{MODEL_LABELS[m]}</span>
