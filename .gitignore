@@ -2,10 +2,6 @@
 # Download from: https://www.kaggle.com/datasets/uciml/electric-power-consumption-data-set
 household_power_consumption.txt
 
-# Generated model artefacts — run train.py to recreate
-*.pkl
-models/
-
 # Python
 __pycache__/
 *.pyc
