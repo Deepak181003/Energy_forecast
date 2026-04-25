@@ -4,9 +4,7 @@ Real-time next-hour electricity usage prediction using Ridge, Lasso, PLS, and PC
 
 ## 🔗 Live Demo
 
-> **[https://your-app.streamlit.app](https://your-app.streamlit.app)**
-> *(Replace with your deployed URL after deployment)*
-
+> [**[https://your-app.streamlit.app](https://your-app.streamlit.app)**](https://energyforecast-xoozm3lztcgwpyeury6nlx.streamlit.app/)
 ---
 
 ## 📋 Assignment Requirements Checklist
