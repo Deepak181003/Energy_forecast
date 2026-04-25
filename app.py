@@ -419,77 +419,93 @@ with tab3:
             unsafe_allow_html=True,
         )
     else:
-        st.markdown(
-            '<div class="tip">⚠️ No evaluation results found. Push <code>models/results.json</code> to GitHub or re-run <code>train.py</code>.</div>',
-            unsafe_allow_html=True,
-        )
+        st.markdown("""
+<div style="background:#1e293b;border:1px dashed #334155;border-radius:12px;
+            padding:32px;text-align:center;margin-bottom:1rem;">
+  <div style="font-size:2rem;margin-bottom:8px;">📊</div>
+  <div style="color:#f1f5f9;font-weight:600;margin-bottom:6px;">No evaluation results yet</div>
+  <div style="color:#64748b;font-size:.85rem;margin-bottom:16px;">
+    Run <code style="background:#0f172a;padding:2px 8px;border-radius:4px;color:#94a3b8">python train.py</code>
+    locally, then push <code style="background:#0f172a;padding:2px 8px;border-radius:4px;color:#94a3b8">models/results.json</code> to GitHub.
+  </div>
+  <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+    <code style="background:#0f172a;border:1px solid #334155;border-radius:6px;
+                 padding:6px 14px;color:#94a3b8;font-size:.8rem">git add models/results.json</code>
+    <code style="background:#0f172a;border:1px solid #334155;border-radius:6px;
+                 padding:6px 14px;color:#94a3b8;font-size:.8rem">git commit -m "Add results"</code>
+    <code style="background:#0f172a;border:1px solid #334155;border-radius:6px;
+                 padding:6px 14px;color:#94a3b8;font-size:.8rem">git push</code>
+  </div>
+</div>""", unsafe_allow_html=True)
 
-    # Eval rows with inline bar
-    max_rmse = max(v["rmse"] for v in cv_results.values())
-    for m, res in cv_results.items():
-        pct = int(res["rmse"] / max_rmse * 100) if max_rmse > 0 else 0
-        bar_color = _ALL_COLORS.get(m, "#64748b")
-        st.markdown(f"""
+    # Eval rows with inline bar — only show when real data exists
+    if has_results:
+        max_rmse = max(v["rmse"] for v in cv_results.values())
+        for m, res in cv_results.items():
+            pct = int(res["rmse"] / max_rmse * 100) if max_rmse > 0 else 0
+            bar_color = _ALL_COLORS.get(m, "#64748b")
+            winner = " 🏆" if m == best else ""
+            st.markdown(f"""
 <div class="eval-row">
-  <span class="eval-name">{MODEL_LABELS[m]}</span>
+  <span class="eval-name">{MODEL_LABELS[m]}{winner}</span>
   <div class="eval-bar-wrap"><div class="eval-bar" style="width:{pct}%;background:{bar_color}"></div></div>
   <span class="eval-val">MSE {res['mse']:.4f} · RMSE {res['rmse']:.4f}</span>
 </div>""", unsafe_allow_html=True)
 
-    st.markdown("")
+        st.markdown("")
 
-    # Side-by-side bar charts
-    e1, e2 = st.columns(2)
+        # Side-by-side bar charts
+        e1, e2 = st.columns(2)
 
-    with e1:
-        st.markdown('<div class="card-label">MSE by Model</div>', unsafe_allow_html=True)
-        fig_mse = go.Figure(go.Bar(
-            x=[MODEL_LABELS[m] for m in cv_results],
-            y=[cv_results[m]["mse"] for m in cv_results],
-            marker_color=[MODEL_COLORS[m] for m in cv_results],
-            marker_line_color="#0d0d0d", marker_line_width=2,
-            text=[f"{cv_results[m]['mse']:.4f}" for m in cv_results],
-            textposition="outside", textfont=dict(color="#9ca3af"),
-        ))
-        fig_mse.update_layout(height=280, **CHART_LAYOUT)
-        dark_axes(fig_mse)
-        fig_mse.update_yaxes(title_text="MSE")
-        st.plotly_chart(fig_mse, use_container_width=True)
+        with e1:
+            st.markdown('<div class="card-label">MSE by Model</div>', unsafe_allow_html=True)
+            fig_mse = go.Figure(go.Bar(
+                x=[MODEL_LABELS[m] for m in cv_results],
+                y=[cv_results[m]["mse"] for m in cv_results],
+                marker_color=[MODEL_COLORS[m] for m in cv_results],
+                marker_line_color="#0f172a", marker_line_width=2,
+                text=[f"{cv_results[m]['mse']:.4f}" for m in cv_results],
+                textposition="outside", textfont=dict(color="#94a3b8"),
+            ))
+            fig_mse.update_layout(height=280, **CHART_LAYOUT)
+            dark_axes(fig_mse)
+            fig_mse.update_yaxes(title_text="MSE")
+            st.plotly_chart(fig_mse, use_container_width=True)
 
-    with e2:
-        st.markdown('<div class="card-label">RMSE by Model</div>', unsafe_allow_html=True)
-        fig_rmse = go.Figure(go.Bar(
-            x=[MODEL_LABELS[m] for m in cv_results],
-            y=[cv_results[m]["rmse"] for m in cv_results],
-            marker_color=[MODEL_COLORS[m] for m in cv_results],
-            marker_line_color="#0d0d0d", marker_line_width=2,
-            text=[f"{cv_results[m]['rmse']:.4f}" for m in cv_results],
-            textposition="outside", textfont=dict(color="#9ca3af"),
-        ))
-        fig_rmse.update_layout(height=280, **CHART_LAYOUT)
-        dark_axes(fig_rmse)
-        fig_rmse.update_yaxes(title_text="RMSE (kW)")
-        st.plotly_chart(fig_rmse, use_container_width=True)
+        with e2:
+            st.markdown('<div class="card-label">RMSE by Model</div>', unsafe_allow_html=True)
+            fig_rmse = go.Figure(go.Bar(
+                x=[MODEL_LABELS[m] for m in cv_results],
+                y=[cv_results[m]["rmse"] for m in cv_results],
+                marker_color=[MODEL_COLORS[m] for m in cv_results],
+                marker_line_color="#0f172a", marker_line_width=2,
+                text=[f"{cv_results[m]['rmse']:.4f}" for m in cv_results],
+                textposition="outside", textfont=dict(color="#94a3b8"),
+            ))
+            fig_rmse.update_layout(height=280, **CHART_LAYOUT)
+            dark_axes(fig_rmse)
+            fig_rmse.update_yaxes(title_text="RMSE (kW)")
+            st.plotly_chart(fig_rmse, use_container_width=True)
 
-    # Scatter: MSE vs RMSE
-    st.markdown('<div class="card-label">MSE vs RMSE Scatter</div>', unsafe_allow_html=True)
-    fig_sc = go.Figure()
-    for m in cv_results:
-        fig_sc.add_trace(go.Scatter(
-            x=[cv_results[m]["mse"]], y=[cv_results[m]["rmse"]],
-            mode="markers+text",
-            marker=dict(size=14, color=MODEL_COLORS[m],
-                        line=dict(color="#0d0d0d", width=2)),
-            text=[MODEL_LABELS[m]], textposition="top center",
-            textfont=dict(color="#9ca3af", size=11),
-            name=MODEL_LABELS[m],
-        ))
-    fig_sc.update_layout(
-        height=260, showlegend=False, **CHART_LAYOUT,
-        xaxis_title="MSE", yaxis_title="RMSE (kW)",
-    )
-    dark_axes(fig_sc)
-    st.plotly_chart(fig_sc, use_container_width=True)
+        # Scatter: MSE vs RMSE
+        st.markdown('<div class="card-label">MSE vs RMSE Scatter</div>', unsafe_allow_html=True)
+        fig_sc = go.Figure()
+        for m in cv_results:
+            fig_sc.add_trace(go.Scatter(
+                x=[cv_results[m]["mse"]], y=[cv_results[m]["rmse"]],
+                mode="markers+text",
+                marker=dict(size=14, color=MODEL_COLORS[m],
+                            line=dict(color="#0f172a", width=2)),
+                text=[MODEL_LABELS[m]], textposition="top center",
+                textfont=dict(color="#94a3b8", size=11),
+                name=MODEL_LABELS[m],
+            ))
+        fig_sc.update_layout(
+            height=260, showlegend=False, **CHART_LAYOUT,
+            xaxis_title="MSE", yaxis_title="RMSE (kW)",
+        )
+        dark_axes(fig_sc)
+        st.plotly_chart(fig_sc, use_container_width=True)
 
 # ══════════════════════════════════════════════
 # TAB 4 — ABOUT
